@@ -10,7 +10,7 @@ const Home = () => {
 
  useEffect(() => {
   const fetchBooks = async () => {
-   const response = await fetch('http://localhost:5000/api/books');
+    const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/books`);
    const json = await response.json();
 
    if (response.ok) {

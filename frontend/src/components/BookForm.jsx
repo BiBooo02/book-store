@@ -17,7 +17,7 @@ const BookForm = () => {
 
    const book = { title, author, description, price, image };
 
-   const response = await fetch("http://localhost:5000/api/books", {
+   const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/books`, {
      method: "POST",
      body: JSON.stringify(book),
      headers: {

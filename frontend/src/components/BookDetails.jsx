@@ -7,7 +7,7 @@ const BookDetails = ({ book }) => {
 
   const handleClick = async () => {
     const response = await fetch(
-      "http://localhost:5000/api/books/" + book._id,
+      `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/books/` + book._id,
       {
         method: "DELETE",
       }
