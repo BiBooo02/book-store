@@ -69,14 +69,14 @@ const BookForm = () => {
 
   return (
     <div className="bg-white/95 backdrop-blur-md rounded-2xl p-8 shadow-xl">
-      <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+      <h3 className="text-2xl font-bold text-white mb-6 text-center">
         Add New Book
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Book Cover Image URL
             </label>
             <input
@@ -100,7 +100,7 @@ const BookForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Book Title
             </label>
             <input
@@ -115,7 +115,7 @@ const BookForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Author
             </label>
             <input
@@ -130,7 +130,7 @@ const BookForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Category
             </label>
             <select
@@ -149,7 +149,7 @@ const BookForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Price ($)
             </label>
             <input
@@ -165,7 +165,7 @@ const BookForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               ISBN (Optional)
             </label>
             <input
@@ -178,7 +178,7 @@ const BookForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Pages (Optional)
             </label>
             <input
@@ -191,7 +191,7 @@ const BookForm = () => {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Description
             </label>
             <textarea
@@ -208,7 +208,7 @@ const BookForm = () => {
 
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:from-blue-600 hover:to-purple-700 transform hover:-translate-y-1 transition-all duration-200 shadow-lg"
+          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-[#4a3728] py-4 px-6 rounded-lg font-semibold text-lg hover:from-blue-600 hover:to-purple-700 transform hover:-translate-y-1 transition-all duration-200 shadow-lg"
         >
           Add Book to Store
         </button>
