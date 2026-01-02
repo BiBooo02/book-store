@@ -1,230 +1,192 @@
 import { useEffect, useState } from "react";
-import { Search, Filter, Grid, List, BookOpen } from 'lucide-react';
+import { BookOpen, BookMarked, CheckCircle } from "lucide-react";
 import { useBookContext } from "../hooks/useBookContext";
+import BookSearch from "../components/BookSearch";
+import CollectionModal from "../components/CollectionModal";
+import CollectionBookCard from "../components/CollectionBookCard";
 
-import BookForm from "../components/BookForm";
-import BookDetails from "../components/BookDetails";
-
-// View Toggle Component
-const ViewToggle = ({ view, onViewChange }) => (
-  <div className="flex bg-white/20 rounded-lg p-1">
-    <button
-      onClick={() => onViewChange('grid')}
-      className={`p-2 rounded transition-all ${
-        view === 'grid'
-          ? 'bg-white/30 text-white'
-          : 'text-white/70 hover:text-white hover:bg-white/10'
-      }`}
-    >
-      <Grid className="w-5 h-5" />
-    </button>
-    <button
-      onClick={() => onViewChange('list')}
-      className={`p-2 rounded transition-all ${
-        view === 'list'
-          ? 'bg-white/30 text-white'
-          : 'text-white/70 hover:text-white hover:bg-white/10'
-      }`}
-    >
-      <List className="w-5 h-5" />
-    </button>
-  </div>
-);
-
-// Advanced Filter Component
-const AdvancedFilter = ({ filters, onFiltersChange }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all"
-      >
-        <Filter className="w-5 h-5" />
-        Filters
-        {Object.values(filters).some(v => v) && (
-          <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-        )}
-      </button>
-
-      {isOpen && (
-        <div className="absolute top-full mt-2 left-0 w-72 bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border border-white/20 p-4 z-50">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={filters.minPrice || ''}
-                  onChange={(e) => onFiltersChange({ ...filters, minPrice: e.target.value })}
-                  className="flex-1 p-2 border border-gray-200 rounded-lg text-sm"
-                />
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={filters.maxPrice || ''}
-                  onChange={(e) => onFiltersChange({ ...filters, maxPrice: e.target.value })}
-                  className="flex-1 p-2 border border-gray-200 rounded-lg text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-              <select
-                value={filters.category || ''}
-                onChange={(e) => onFiltersChange({ ...filters, category: e.target.value })}
-                className="w-full p-2 border border-gray-200 rounded-lg text-sm"
-              >
-                <option value="">All Categories</option>
-                <option value="fiction">Fiction</option>
-                <option value="non-fiction">Non-Fiction</option>
-                <option value="mystery">Mystery</option>
-                <option value="romance">Romance</option>
-                <option value="sci-fi">Science Fiction</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={filters.inStock || false}
-                  onChange={(e) => onFiltersChange({ ...filters, inStock: e.target.checked })}
-                  className="rounded"
-                />
-                <span className="text-sm text-gray-700">In Stock Only</span>
-              </label>
-            </div>
-
-            <div className="flex gap-2 pt-2">
-              <button
-                onClick={() => onFiltersChange({})}
-                className="flex-1 py-2 text-sm text-gray-600 hover:text-gray-800"
-              >
-                Clear All
-              </button>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="flex-1 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600"
-              >
-                Apply
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const EnhancedHome = () => {
-  const { books, dispatch } = useBookContext();
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("");
-  const [view, setView] = useState('grid');
-  const [filters, setFilters] = useState({});
+const Home = () => {
+  const { collections, dispatch } = useBookContext();
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [showCollectionModal, setShowCollectionModal] = useState(false);
+  const [activeTab, setActiveTab] = useState("all");
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/books`
-      );
-      const json = await response.json();
+    const fetchCollections = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/collections`
+        );
+        const json = await response.json();
 
-      if (response.ok) {
-        dispatch({ type: "SET_BOOKS", payload: json });
+        if (response.ok) {
+          dispatch({ type: "SET_COLLECTIONS", payload: json });
+        }
+      } catch (error) {
+        console.error("Error fetching collections:", error);
       }
     };
 
-    fetchBooks();
+    fetchCollections();
   }, [dispatch]);
 
-  // Filter and sort books
-  let filteredBooks = books || [];
-  
-  if (search) {
-    filteredBooks = filteredBooks.filter(
-      (book) =>
-        book.title.toLowerCase().includes(search.toLowerCase()) ||
-        book.author.toLowerCase().includes(search.toLowerCase())
-    );
-  }
+  const handleBookSelect = (book, event) => {
+    setSelectedBook(book);
+    // Get click position relative to viewport
+    const rect = event?.currentTarget?.getBoundingClientRect();
+    if (rect) {
+      setModalPosition({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      });
+    } else {
+      // Center if no position available
+      setModalPosition({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      });
+    }
+    setShowCollectionModal(true);
+  };
 
-  if (filters.minPrice) {
-    filteredBooks = filteredBooks.filter(book => book.price >= parseFloat(filters.minPrice));
-  }
-  if (filters.maxPrice) {
-    filteredBooks = filteredBooks.filter(book => book.price <= parseFloat(filters.maxPrice));
-  }
+  const handleAddToCollection = async (book, collection, review = null) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/collections`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...book,
+            collection,
+            review,
+          }),
+        }
+      );
 
-  if (sort === "title") {
-    filteredBooks = [...filteredBooks].sort((a, b) =>
-      a.title.localeCompare(b.title)
-    );
-  } else if (sort === "price") {
-    filteredBooks = [...filteredBooks].sort((a, b) => a.price - b.price);
-  }
+      const data = await response.json();
+
+      if (response.ok) {
+        dispatch({ type: "ADD_TO_COLLECTION", payload: data });
+      } else if (data.requiresReview) {
+        // If review is required, show review form
+        setSelectedBook({ ...book, collection: "doneReading" });
+        setShowCollectionModal(true);
+      } else {
+        alert(data.error || "Failed to add book to collection");
+      }
+    } catch (error) {
+      console.error("Error adding to collection:", error);
+      alert("Failed to add book to collection");
+    }
+  };
+
+  const filteredCollections = collections.filter((book) => {
+    if (activeTab === "all") return true;
+    return book.collection === activeTab;
+  });
+
+  const collectionStats = {
+    all: collections.length,
+    wantToRead: collections.filter((b) => b.collection === "wantToRead").length,
+    currentlyReading: collections.filter(
+      (b) => b.collection === "currentlyReading"
+    ).length,
+    doneReading: collections.filter((b) => b.collection === "doneReading")
+      .length,
+  };
 
   return (
     <div className="home">
-      {/* Enhanced Controls */}
-      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-8">
-        <div className="flex flex-wrap gap-4 items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70" />
-              <input
-                type="text"
-                placeholder="Search books or authors..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-4 py-3 bg-white/20 text-white placeholder-white/70 border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 w-80"
-              />
-            </div>
-            
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="px-4 py-3 bg-white/20 text-white border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50"
-            >
-              <option value="">Sort By</option>
-              <option value="title">Title</option>
-              <option value="price">Price</option>
-            </select>
-            
-            <AdvancedFilter filters={filters} onFiltersChange={setFilters} />
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-white mb-2 text-center">
+          My Book Collections
+        </h1>
+        <p className="text-white text-center">
+          Track your reading journey and share your thoughts
+        </p>
+      </div>
+
+      {/* Collection Tabs */}
+      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-2 mb-8">
+        <div className="flex flex-wrap gap-2 justify-center">
+          <button
+            onClick={() => setActiveTab("all")}
+            className="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700"
+          >
+            All ({collectionStats.all})
+          </button>
+          <button
+            onClick={() => setActiveTab("wantToRead")}
+            className="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700"
+          >
+            <BookOpen className="w-4 h-4 text-white" />
+            Want to Read ({collectionStats.wantToRead})
+          </button>
+          <button
+            onClick={() => setActiveTab("currentlyReading")}
+            className="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700"
+          >
+            <BookMarked className="w-4 h-4 text-white" />
+            Currently Reading ({collectionStats.currentlyReading})
+          </button>
+          <button
+            onClick={() => setActiveTab("doneReading")}
+            className="px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700"
+          >
+            <CheckCircle className="w-4 h-4 text-white" />
+            Done Reading ({collectionStats.doneReading})
+          </button>
+        </div>
+      </div>
+
+      {/* Book Search */}
+      <BookSearch
+        onBookSelect={(book, event) => handleBookSelect(book, event)}
+      />
+
+      {/* Collections Display */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-white mb-4">
+          {activeTab === "all" && "All Books"}
+          {activeTab === "wantToRead" && "Want to Read"}
+          {activeTab === "currentlyReading" && "Currently Reading"}
+          {activeTab === "doneReading" && "Done Reading"}
+        </h2>
+
+        {filteredCollections.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredCollections.map((book) => (
+              <CollectionBookCard key={book._id} book={book} />
+            ))}
           </div>
-          
-          <ViewToggle view={view} onViewChange={setView} />
-        </div>
+        ) : (
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center">
+            <BookOpen className="w-16 h-16 text-white/50 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-white mb-2">
+              No books in this collection yet
+            </h3>
+            <p className="text-white">
+              Search for books above and add them to your collections
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Books Grid/List */}
-      <div className={`${
-        view === 'grid' 
-          ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
-          : 'space-y-4'
-      } mb-8`}>
-        {filteredBooks &&
-          filteredBooks.map((book) => (
-            <BookDetails key={book._id} book={book} view={view} />
-          ))}
-      </div>
-
-      {filteredBooks.length === 0 && (
-        <div className="text-center py-16">
-          <BookOpen className="w-16 h-16 text-white/50 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-white mb-2">No books found</h3>
-          <p className="text-white/70">Try adjusting your search or filters</p>
-        </div>
-      )}
-
-      <BookForm />
+      {/* Collection Modal */}
+      <CollectionModal
+        book={selectedBook}
+        isOpen={showCollectionModal}
+        position={modalPosition}
+        onClose={() => {
+          setShowCollectionModal(false);
+          setSelectedBook(null);
+        }}
+        onAddToCollection={handleAddToCollection}
+      />
     </div>
   );
 };
 
-export default EnhancedHome;
+export default Home;

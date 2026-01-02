@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heart, ShoppingCart, Eye } from 'lucide-react';
+import { Heart, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useBookContext } from "../hooks/useBookContext";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
@@ -37,9 +37,7 @@ const BookDetails = ({ book, view = 'grid' }) => {
     }
   };
 
-  const rating = book.rating || Math.random() * 2 + 3;
-  const isNew = Math.random() > 0.7;
-  const isBestseller = Math.random() > 0.8;
+  const rating = book.rating || 4.0;
 
   if (view === 'list') {
     return (
@@ -68,8 +66,6 @@ const BookDetails = ({ book, view = 'grid' }) => {
             <div className="flex justify-between items-center mt-3">
               <span className="text-xl font-bold text-blue-600">${book.price}</span>
               <div className="flex gap-2 items-center">
-                {isNew && <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">New</span>}
-                {isBestseller && <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Bestseller</span>}
                 <button onClick={handleDelete} className="px-3 py-1 bg-red-100 text-red-800 text-xs rounded-full hover:bg-red-200 transition-colors">
                   Delete
                 </button>
@@ -95,19 +91,7 @@ const BookDetails = ({ book, view = 'grid' }) => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Badges */}
-        <div className="absolute top-4 left-4 z-10 flex flex-col gap-1">
-          {isNew && (
-            <span className="px-2 py-1 bg-green-500 text-white text-xs rounded-full font-medium">
-              New
-            </span>
-          )}
-          {isBestseller && (
-            <span className="px-2 py-1 bg-yellow-500 text-white text-xs rounded-full font-medium">
-              Bestseller
-            </span>
-          )}
-        </div>
+
 
         {/* Action Buttons */}
         <div className={`absolute top-4 right-4 z-10 flex flex-col gap-2 transition-opacity duration-200 ${
@@ -143,10 +127,6 @@ const BookDetails = ({ book, view = 'grid' }) => {
           <p className="text-sm text-gray-500 line-clamp-2">{book.description}</p>
           <div className="flex justify-between items-center pt-2">
             <span className="text-xl font-bold text-blue-600">${book.price}</span>
-            <span className="text-sm text-gray-400 flex items-center gap-1">
-              <Eye className="w-4 h-4" />
-              {Math.floor(Math.random() * 1000) + 100}
-            </span>
           </div>
           <p className="text-xs text-gray-400">
             {formatDistanceToNow(new Date(book.createdAt), { addSuffix: true })}

@@ -17,7 +17,7 @@ const CartDropdown = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="absolute right-0 top-full mt-2 w-80 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 z-50 max-h-96 overflow-hidden">
+    <div className="absolute right-0 top-full mt-2 w-80 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 z-9999 max-h-96 overflow-hidden">
       <div className="p-4 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-lg">Shopping Cart</h3>

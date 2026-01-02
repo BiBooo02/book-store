@@ -1,79 +1,52 @@
-import {createContext, useReducer } from 'react'
+import { createContext, useReducer } from "react";
 
-export const BookContext = createContext()
+export const BookContext = createContext();
 
 export const booksReducer = (state, action) => {
-  switch(action.type) {
-   case 'SET_BOOKS':
-    return {
-     ...state,
-     books: action.payload
-    }
-   case 'CREATE_BOOK':
-    return {
-     ...state,
-     books: [action.payload, ...state.books]
-    }
-    case 'DELETE_BOOK':
+  switch (action.type) {
+    case "SET_COLLECTIONS":
       return {
         ...state,
-        books: state.books.filter((b) => b._id !== action.payload._id)
-      }
-    case 'TOGGLE_FAVORITE':
-      return {
-        ...state,
-        books: state.books.map(book => 
-          book._id === action.payload._id 
-            ? { ...book, isFavorite: !book.isFavorite }
-            : book
-        )
-      }
-    case 'ADD_TO_CART': {
-      const existingItem = (state.cart || []).find(item => item._id === action.payload._id);
-      if (existingItem) {
-        return {
-          ...state,
-          cart: state.cart.map(item =>
-            item._id === action.payload._id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          )
-        };
-      }
-      return {
-        ...state,
-        cart: [...(state.cart || []), { ...action.payload, quantity: 1 }]
+        collections: action.payload,
       };
-    }
-    case 'REMOVE_FROM_CART':
+    case "ADD_TO_COLLECTION":
       return {
         ...state,
-        cart: (state.cart || []).filter(item => item._id !== action.payload._id)
+        collections: [action.payload, ...state.collections],
       };
-    case 'UPDATE_CART_QUANTITY':
+    case "UPDATE_COLLECTION":
       return {
         ...state,
-        cart: (state.cart || []).map(item =>
-          item._id === action.payload._id
-            ? { ...item, quantity: Math.max(0, action.payload.quantity) }
-            : item
-        ).filter(item => item.quantity > 0)
+        collections: state.collections.map((book) =>
+          book._id === action.payload._id ? action.payload : book
+        ),
       };
-   default:
-    return state
+    case "REMOVE_FROM_COLLECTION":
+      return {
+        ...state,
+        collections: state.collections.filter(
+          (b) => b._id !== action.payload._id
+        ),
+      };
+    case "SET_SEARCH_RESULTS":
+      return {
+        ...state,
+        searchResults: action.payload,
+      };
+    default:
+      return state;
   }
-}
+};
 
-export const BooksContextProvider  = ({children}) => {
- const [state, dispatch] = useReducer(booksReducer, {
-  books: [],
-  cart: [],
-  favorites: []
- });
+export const BooksContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(booksReducer, {
+    collections: [],
+    searchResults: [],
+  });
 
- return (
-  <BookContext.Provider value={{...state, dispatch}}>
-   { children }
-  </BookContext.Provider>
- )
-}
+  return (
+    <BookContext.Provider value={{ ...state, dispatch }}>
+      {children}
+    </BookContext.Provider>
+  );
+};

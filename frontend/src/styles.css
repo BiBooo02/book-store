@@ -168,6 +168,9 @@ body::before {
 .text-red-800 { color: #991b1b; }
 .text-green-800 { color: #166534; }
 .text-yellow-800 { color: #92400e; }
+.text-amber-700 { color: #b45309; }
+.text-gray-800 { color: var(--gray-800); }
+.placeholder-gray-500::placeholder { color: var(--gray-500); }
 
 .bg-white { background-color: var(--white); }
 .bg-red-50 { background-color: #fef2f2; }
@@ -186,6 +189,7 @@ body::before {
 .border-gray-200 { border-color: var(--gray-200); }
 .border-gray-300 { border-color: var(--gray-300); }
 .border-red-300 { border-color: #fca5a5; }
+.border-amber-700 { border-color: #b45309; }
 
 .rounded { border-radius: var(--radius); }
 .rounded-lg { border-radius: var(--radius-lg); }
@@ -216,6 +220,8 @@ body::before {
 .focus\:outline-none:focus { outline: none; }
 .focus\:ring-2:focus { box-shadow: 0 0 0 2px var(--primary); }
 .focus\:ring-blue-500:focus { box-shadow: 0 0 0 2px var(--primary); }
+.focus\:ring-amber-600:focus { box-shadow: 0 0 0 2px #d97706; }
+.focus\:border-amber-600:focus { border-color: #d97706; }
 .focus\:border-transparent:focus { border-color: transparent; }
 
 .relative { position: relative; }
@@ -225,6 +231,7 @@ body::before {
 .right-4 { right: 1rem; }
 .z-10 { z-index: 10; }
 .z-50 { z-index: 50; }
+.z-9999 { z-index: 9999; }
 
 .opacity-0 { opacity: 0; }
 .opacity-100 { opacity: 1; }
@@ -254,7 +261,7 @@ body::before {
   backdrop-filter: blur(10px);
   border-bottom: 3px solid #8b4513;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  padding: 1rem 0;
+  padding: 1.2rem 0;
 }
 
 .navbar .logo {
@@ -268,6 +275,29 @@ body::before {
 .navbar .logo:hover {
   color: #d2b48c;
   transform: scale(1.05);
+}
+
+.navbar button {
+  background: rgba(244, 228, 193, 0.2);
+  border: 2px solid #f4e4c1;
+  color: #f4e4c1;
+  padding: 0.6rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.navbar button:hover {
+  background: rgba(244, 228, 193, 0.3);
+  border-color: #d2b48c;
+  transform: scale(1.05);
+}
+
+.navbar button span {
+  background: #8b4513;
+  color: #f4e4c1;
+  border: 1px solid #654321;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Book Cards - Styled as books on a shelf */
@@ -286,6 +316,10 @@ body::before {
   position: relative;
   overflow: visible;
   transform-style: preserve-3d;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 550px;
 }
 
 .book-card::before {
@@ -324,17 +358,18 @@ body::before {
 
 .book-card img {
   width: 100%;
-  height: 12rem;
+  height: 15rem;
   object-fit: cover;
   border-radius: 4px;
   margin-bottom: 1rem;
   transition: transform 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(139, 69, 19, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(139, 69, 19, 0.3);
 }
 
 .book-card:hover img {
   transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
 }
 
 .book-card h3 {
@@ -347,6 +382,10 @@ body::before {
 .book-card .text-gray-600 {
   color: #654321;
   font-style: italic;
+}
+
+.book-card > div:last-child {
+  margin-top: auto;
 }
 
 .book-card-list {
@@ -481,44 +520,59 @@ body::before {
 
 /* Controls - Library Search Bar */
 .controls {
-  background: linear-gradient(135deg, rgba(139, 69, 19, 0.15) 0%, rgba(101, 67, 33, 0.2) 100%);
+  background: linear-gradient(135deg, #f4e4c1 0%, #e8d4a8 100%);
   backdrop-filter: blur(12px);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  border: 2px solid rgba(139, 69, 19, 0.3);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 3px solid #8b4513;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .controls input,
 .controls select {
-  padding: 0.75rem 1rem;
-  border: 2px solid rgba(139, 69, 19, 0.4);
-  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  border: 2px solid #8b4513;
+  border-radius: 8px;
   font-size: 1rem;
-  background: rgba(244, 228, 193, 0.9);
+  background: #ffffff;
   color: #2c1810;
   transition: all 0.3s ease;
+  font-weight: 500;
 }
 
 .controls input::placeholder {
-  color: rgba(44, 24, 16, 0.6);
+  color: rgba(44, 24, 16, 0.5);
+  font-weight: 400;
 }
 
 .controls input:focus,
 .controls select:focus {
   outline: none;
-  border-color: #8b4513;
-  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2);
-  background: #f4e4c1;
+  border-color: #654321;
+  box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.3);
+  background: #ffffff;
 }
 
 /* Cart Dropdown - Vintage Style */
 .absolute.right-0.top-full {
   background: linear-gradient(135deg, #f4e4c1 0%, #e8d4a8 100%);
   backdrop-filter: none;
-  border: 2px solid #8b4513;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border: 3px solid #8b4513;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 9999 !important;
+}
+
+.absolute.right-0.top-full button {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+  border: 2px solid #654321;
+  color: #f4e4c1;
+  font-weight: 600;
+}
+
+.absolute.right-0.top-full button:hover {
+  background: linear-gradient(135deg, #a0522d 0%, #8b4513 100%);
+  transform: translateY(-1px);
 }
 
 /* Badges - Vintage Library Tags */
@@ -530,16 +584,35 @@ body::before {
 
 /* Buttons - Wooden Style */
 button.bg-red-500,
-button.bg-blue-500 {
-  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
-  border: 1px solid #654321;
-  color: #f4e4c1;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+button.bg-blue-500,
+.bg-gradient-to-r {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%) !important;
+  border: 2px solid #654321 !important;
+  color: #f4e4c1 !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
 }
 
 button.bg-red-500:hover,
-button.bg-blue-500:hover {
-  background: linear-gradient(135deg, #a0522d 0%, #8b4513 100%);
+button.bg-blue-500:hover,
+.bg-gradient-to-r:hover {
+  background: linear-gradient(135deg, #a0522d 0%, #8b4513 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Filter and View Toggle Buttons */
+.bg-white\/20,
+.bg-white\/30 {
+  background: rgba(244, 228, 193, 0.3) !important;
+  border: 2px solid rgba(139, 69, 19, 0.5) !important;
+  color: #f4e4c1 !important;
+}
+
+.bg-white\/30,
+.bg-white\/20:hover {
+  background: rgba(244, 228, 193, 0.5) !important;
+  border-color: #8b4513 !important;
 }
 
 /* Action Icons Background */

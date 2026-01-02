@@ -4,7 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const books = require("./routes/books");
 const mongoose = require("mongoose");
-const cors = require("cors")
+const cors = require("cors");
 
 //Express app initialization
 const app = express();
@@ -20,6 +20,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/api/books", books);
+app.use("/api/collections", require("./routes/collections"));
 
 // Connect to MongoDB
 mongoose
@@ -32,4 +33,3 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
