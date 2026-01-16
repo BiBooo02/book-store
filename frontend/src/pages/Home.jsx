@@ -10,7 +10,6 @@ const Home = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [showCollectionModal, setShowCollectionModal] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -31,22 +30,8 @@ const Home = () => {
     fetchCollections();
   }, [dispatch]);
 
-  const handleBookSelect = (book, event) => {
+  const handleBookSelect = (book) => {
     setSelectedBook(book);
-    // Get click position relative to viewport
-    const rect = event?.currentTarget?.getBoundingClientRect();
-    if (rect) {
-      setModalPosition({
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2,
-      });
-    } else {
-      // Center if no position available
-      setModalPosition({
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
-      });
-    }
     setShowCollectionModal(true);
   };
 
@@ -142,9 +127,7 @@ const Home = () => {
       </div>
 
       {/* Book Search */}
-      <BookSearch
-        onBookSelect={(book, event) => handleBookSelect(book, event)}
-      />
+      <BookSearch onBookSelect={handleBookSelect} />
 
       {/* Collections Display */}
       <div className="mb-8">
@@ -178,7 +161,6 @@ const Home = () => {
       <CollectionModal
         book={selectedBook}
         isOpen={showCollectionModal}
-        position={modalPosition}
         onClose={() => {
           setShowCollectionModal(false);
           setSelectedBook(null);

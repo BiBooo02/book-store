@@ -96,29 +96,31 @@ const BookSearch = ({ onBookSelect }) => {
             {searchResults.map((book) => (
               <div
                 key={book.bookId}
-                className="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer"
-                onClick={(e) => onBookSelect(book, e)}
+                className="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer flex flex-col items-center"
+                onClick={() => onBookSelect(book)}
               >
-                <img
-                  src={book.image}
-                  alt={book.title}
-                  className="w-full h-48 object-cover rounded-lg mb-3"
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/300x400?text=No+Cover";
-                  }}
-                />
-                <h5 className="font-semibold text-white line-clamp-2 mb-1">
+                <div className="w-full flex justify-center mb-3">
+                  <img
+                    src={book.image}
+                    alt={book.title}
+                    className="w-28 h-40 sm:w-32 sm:h-48 object-contain rounded-lg shadow-md"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/300x400?text=No+Cover";
+                    }}
+                  />
+                </div>
+                <h5 className="font-semibold text-white line-clamp-2 mb-1 text-center">
                   {book.title}
                 </h5>
-                <p className="text-sm text-white mb-2">
+                <p className="text-sm text-white mb-2 text-center">
                   by{" "}
                   {Array.isArray(book.author)
                     ? book.author.join(", ")
                     : book.author}
                 </p>
                 {book.publishedDate && (
-                  <p className="text-xs text-white">{book.publishedDate}</p>
+                  <p className="text-xs text-white text-center">{book.publishedDate}</p>
                 )}
               </div>
             ))}
