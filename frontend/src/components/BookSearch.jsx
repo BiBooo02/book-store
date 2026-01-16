@@ -128,7 +128,7 @@ const BookSearch = ({ onBookSelect }) => {
 
       {searchResults.length === 0 && !loading && !error && (
         <div className="text-center py-8">
-          <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <BookOpen className="w-16 h-16 text-white mx-auto mb-4 mt-4" />
           <p className="text-white">
             Search for books to add to your collections
           </p>

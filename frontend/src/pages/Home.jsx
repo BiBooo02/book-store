@@ -162,8 +162,8 @@ const Home = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center">
-            <BookOpen className="w-16 h-16 text-white/50 mx-auto mb-4" />
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center mt-10">
+            <BookOpen className="w-16 h-16 text-white mx-auto mb-4 mt-10" />
             <h3 className="text-xl font-semibold text-white mb-2">
               No books in this collection yet
             </h3>
