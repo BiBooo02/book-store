@@ -32,13 +32,30 @@ const CollectionModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div 
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        bottom: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       ></div>
       <div
-        className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto"
+        className="relative z-10 bg-white rounded-2xl shadow-2xl max-w-xs w-full max-h-[80vh] overflow-y-auto"
+        style={{ 
+          position: 'relative',
+          width: '100%',
+          maxWidth: '20rem'
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
