@@ -33,7 +33,7 @@ const CollectionModal = ({
 
   return (
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fadeIn"
       style={{ 
         position: 'fixed', 
         top: 0, 
@@ -46,11 +46,11 @@ const CollectionModal = ({
       }}
     >
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-fadeIn"
         onClick={onClose}
       ></div>
       <div
-        className="relative z-10 bg-white rounded-2xl shadow-2xl max-w-xs w-full max-h-[80vh] overflow-y-auto"
+        className="relative z-10 bg-white rounded-2xl shadow-2xl max-w-xs w-full max-h-[80vh] overflow-y-auto animate-modalEnter"
         style={{ 
           position: 'relative',
           width: '100%',
@@ -96,24 +96,24 @@ const CollectionModal = ({
           </div>
 
           {!showReviewForm ? (
-            <div className="space-y-3">
+            <div className="flex flex-col items-center gap-3">
               <button
                 onClick={() => handleCollectionSelect("wantToRead")}
-                className="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-colors flex items-center justify-center gap-2"
+                className="w-auto min-w-[200px] py-2.5 px-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-colors flex items-center justify-center gap-2"
               >
                 <span>📚</span>
                 Want to Read
               </button>
               <button
                 onClick={() => handleCollectionSelect("currentlyReading")}
-                className="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-colors flex items-center justify-center gap-2"
+                className="w-auto min-w-[200px] py-2.5 px-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-colors flex items-center justify-center gap-2"
               >
                 <span>📖</span>
                 Currently Reading
               </button>
               <button
                 onClick={() => handleCollectionSelect("doneReading")}
-                className="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-colors flex items-center justify-center gap-2"
+                className="w-auto min-w-[200px] py-2.5 px-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-colors flex items-center justify-center gap-2"
               >
                 <span>✅</span>
                 Done Reading
